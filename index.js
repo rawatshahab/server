@@ -11,10 +11,11 @@ app.use(bodyParser.json()); // Parse JSON payloads
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use((req, res, next) => {
-  if (req.headers["x-forwarded-proto"] !== "https") {
-    return res.redirect(`https://${req.headers.host}${req.url}`);
+  if (req.headers["x-forwarded-proto"] && req.headers["x-forwarded-proto"] !== "https") {
+    res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
+  } else {
+    next();
   }
-  next();
 });
 const server = http.createServer(app);
 
