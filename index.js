@@ -19,7 +19,11 @@ app.use((req, res, next) => {
 });
 const server = http.createServer(app);
 
-const io = new Server(server);
+
+const io = new Server(server, {
+  cors: { origin: "*" },
+  transports: ["websocket", "polling"],
+});
 
 const userSocketMap = {};
 const getAllConnectedClients = (roomId) => {
